@@ -322,17 +322,19 @@ public class ChainedHashTable<K, V> implements HashTable<K, V> {
   void expand() {
     // Figure out the size of the new table
     int newSize = 2 * this.buckets.length + rand.nextInt(10);
+    
     if (REPORT_BASIC_CALLS && (reporter != null)) {
       reporter.report("Expanding to " + newSize + " elements.");
     } // if reporter != null
 
+    this.size = 0;
     Object[] oldBuckets = buckets.clone();
     Object[] newBuckets = new Object[newSize];
     buckets = newBuckets;
 
     ArrayList<Pair<K, V>> tempBucket = null;
     for (int i = 0; i < oldBuckets.length; i++) {
-      tempBucket = (ArrayList<Pair<K, V>>) (buckets[i]);
+      tempBucket = (ArrayList<Pair<K, V>>) (oldBuckets[i]);
       if (tempBucket != null) {
         for (int j = 0; j < tempBucket.size(); j++) {
           set(tempBucket.get(j).key(), tempBucket.get(j).value());
